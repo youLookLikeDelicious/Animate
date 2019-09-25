@@ -1,3 +1,4 @@
-/.git
-/.idea
+/.git/
+/.idea/
 /node_modules/
+/public/

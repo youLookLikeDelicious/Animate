@@ -1,13 +1,5 @@
-const styleReg = /(\d+)([a-z%]*)/
-const separatePI = Math.PI / 2
-const bufferReg = /(\w+)\s*(\(?\s*[\d\,\. ]*\)?)/      // 将缓冲函数的参数和函数体分离
-// 获取rem的值
-const REM = window.getComputedStyle?
-            parseInt( window.getComputedStyle( document.body ).fontSize ):
-            parseInt( document.body.currentStyle['font-size'] )
-
 // 缓冲函数
-const buffers = {
+const easing = {
     liner: function (t) {
         return t;
     },
@@ -37,11 +29,11 @@ const buffers = {
     },
     bezier:function (t) {
         if( arguments.length === 3 ){
-            return buffers.bezier3(t, arguments[1], arguments[2])
+            return easing.bezier3(t, arguments[1], arguments[2])
         } else{
-            return buffers.bezier2(t, arguments[1])
+            return easing.bezier2(t, arguments[1])
         }
     }
 }
 
-export {styleReg, separatePI, REM, bufferReg, buffers}
+export default easing

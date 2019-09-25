@@ -1,4 +1,4 @@
-import{REM, styleReg, bufferReg} from "./global";
+import{REM, styleReg, easingReg} from "./macro";
 // 默认动画速度,单位毫秒
 let speeds = {
         fast: 200,
@@ -9,35 +9,35 @@ let speeds = {
     autoConfig = {
         // 渐现
         // 只要不透明度小于1，就执行动画
-        fadeIn: function(elem){
-            if(window.Animate.css(elem, 'opacity') < 1){
+        fadeIn: function(el){
+            if(window.Animate.css(el, 'opacity') < 1){
                 return {"opacity": 1};
             }
         },
         // 渐隐
         // 只要不透明度大于0就执行动画
-        fadeOut: function(elem){
-            if(window.Animate.css(elem, 'opacity')  > 0){
+        fadeOut: function(el){
+            if(window.Animate.css(el, 'opacity')  > 0){
                 return {"opacity": 0};
             }
         },
         // 自动渐隐渐现
-        fadeToggle: function(elem){
+        fadeToggle: function(el){
             var Animate = window.Animate;
-            if(Animate.css(elem, 'opacity') == 0){
+            if(Animate.css(el, 'opacity') == 0){
                 return {"opacity": 1};
-            } else if(Animate.css(elem, 'opacity') == 1){
+            } else if(Animate.css(el, 'opacity') == 1){
                 return {"opacity": 0};
             }
         },
         // 向上滑动
-        slideUp: function(elem){
-            elem.setAttribute('data-direct', 'up')
-            var h = elem.getAttribute('slideTo') ;
+        slideUp: function(el){
+            el.setAttribute('data-direct', 'up')
+            var h = el.getAttribute('slideTo') ;
             // 如果元素没有slidTo属性，添加之，值为元素当前的计算高度
             if( !h ){
-                h = window.Animate.css(elem, 'height')
-                elem.setAttribute( 'slideTo', h )
+                h = window.Animate.css(el, 'height')
+                el.setAttribute( 'slideTo', h )
             }
 
             if(h > 0){
@@ -45,31 +45,31 @@ let speeds = {
             }
         },
         // 向下滑动
-        slideDown: function( elem ){
-            elem.setAttribute('data-direct', 'down');
-            var h = elem.getAttribute('slideTo');
-            if(elem.style.disply == 'none'){
-                elem.style.disply = 'block'
+        slideDown: function( el ){
+            el.setAttribute('data-direct', 'down');
+            var h = el.getAttribute('slideTo');
+            if(el.style.disply == 'none'){
+                el.style.disply = 'block'
             }
             // 没有slideTo Attribute 添加之
             if(!h){
-                h = window.Animate.css(elem, 'height');
-                elem.setAttribute('slideTo', h);
-                elem.style.height = '0';
+                h = window.Animate.css(el, 'height');
+                el.setAttribute('slideTo', h);
+                el.style.height = '0';
             }
             return {height: h}
         },
         // 自动滑动
         // 1、当前的计算高度为0 向下滑动
         // 2、当前的计算高 > 0 向上滑动
-        slideToggle: function(elem){
-            var direct = elem.getAttribute('data-direct') || 'down';    // 获取元素当前的高度
+        slideToggle: function(el){
+            var direct = el.getAttribute('data-direct') || 'down';    // 获取元素当前的高度
 
             if( direct === 'up'){
-                return this.slideDown(elem);
+                return this.slideDown(el);
             }
             else if( direct === 'down' ){
-                return this.slideUp(elem);
+                return this.slideUp(el);
             }
         }
     }
@@ -78,17 +78,17 @@ let speeds = {
 // 一个元素对象对应的一个或多个动画效果
 class AnimateInstance{
     /**
-     * @param elem 元素对象
+     * @param el 元素对象
      * @param config string || json
      * @param duration 执行的周期
      * @param delay 可以是时间或函数，当delay为function时，默认立即执行
      * @param callback 回调函数
      */
-    constructor(elem, config, duration, delay, callback){
+    constructor(el, config, duration, delay, callback){
         this.parent = window.Animate;
 
         this.queue = [];
-        this.elem = elem;
+        this.el = el;
         this.speeds = speeds;
 
         // 根据指令生成配置
@@ -97,7 +97,7 @@ class AnimateInstance{
             if(!this[config])
                 return ;
 
-            config = this[config](elem);
+            config = this[config](el);
         }
         this.animate(config, duration, delay, callback);
     }
@@ -177,11 +177,11 @@ class AnimateInstance{
         let i, cur,
             Animate = this.parent,
             tmp     = {},
-            elem    = this.elem,
+            el    = this.el,
             compute_val = {},
             cur_val = {},
             unit    = '',              // 属性的单位
-            styles  = Animate.css(elem);
+            styles  = Animate.css(el);
 
         // 所传的配置参数必须是json对象，否则不予以处理
         if(Object.prototype.toString.call(config) === '[object Object]'){
@@ -191,13 +191,12 @@ class AnimateInstance{
                     let styleStack = config[i].match(styleReg)
                     unit = styleStack[2]
                     // 获取属性当前的值
-                    cur = Animate.css(elem, i)
+                    cur = Animate.css(el, i)
 
                     // 如果计算的长度单位是rem，将cur的值转换成rem
                     // 相应的，dom元素的属性也应该改变
                     if( unit === 'rem' ){
-                        cur /= REM
-                        Animate.css(elem, config[i])
+                        styleStack[1] *= REM
                     }
 
                     compute_val[i] = styleStack[1] - cur
@@ -207,7 +206,7 @@ class AnimateInstance{
 
             // 获取缓冲函数及其参数
             if( config.hasOwnProperty('buffer') ){
-                let buffer = config.buffer.match(bufferReg)
+                let buffer = config.buffer.match(easingReg)
                 tmp['buffer'] = buffer[1]
                 // 提取( 1， 23 )中的参数，保存在数组中
                 tmp['bufferArguments'] = buffer[2].slice(1, -1).replace(' ', '').split(',')

@@ -11,14 +11,14 @@
             position: relative;
             left: 10px;
             --size: 45px;
-            height: 45px;
+            height: 4.5rem;
             width: 45px;
             background-color: aquamarine;
             margin-top: 12px;
         }
         /*css3动画*/
         .box-ani{
-            /*animation: box-ani 2s;*/
+            animation: box-ani 2s;
         }
         @keyframes box-ani {
             to{width: 400px}
@@ -36,7 +36,7 @@
     Animate.animate(div[0], {
         width:'400px',
         buffer: 'bezier(0.5, 2)'
-    }, 3000)
+    }, 1000)
     // Animate.animate(div[1], {
     //     width:'400px',
     //     buffer: 'swing'
