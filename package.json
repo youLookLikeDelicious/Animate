@@ -1,6 +1,6 @@
 {
   "name": "xy-animate",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "JavaScript Animation",
   "main": "src/index.js",
   "scripts": {
@@ -38,6 +38,8 @@
     "Animate.js",
     "AnimateInstance.js",
     "easing.js",
-    "macro.js"
+    "macro.js",
+    "extends.js",
+    "compatibility.js"
   ]
 }

@@ -178,7 +178,7 @@ class AnimateInstance{
             Animate = this.parent,
             tmp     = {},
             el    = this.el,
-            compute_val = {},
+            computeVal = {},
             cur_val = {},
             unit    = '',              // 属性的单位
             styles  = Animate.css(el);
@@ -199,25 +199,25 @@ class AnimateInstance{
                         styleStack[1] *= REM
                     }
 
-                    compute_val[i] = styleStack[1] - cur
+                    computeVal[i] = styleStack[1] - cur
                     cur_val[i] = cur
                 }
             }
 
             // 获取缓冲函数及其参数
-            if( config.hasOwnProperty('buffer') ){
-                let buffer = config.buffer.match(easingReg)
-                tmp['buffer'] = buffer[1]
+            if( config.hasOwnProperty('easing') ){
+                let easing = config.easing.match(easingReg)
+                tmp['easing'] = easing[1]
                 // 提取( 1， 23 )中的参数，保存在数组中
-                tmp['bufferArguments'] = buffer[2].slice(1, -1).replace(' ', '').split(',')
+                tmp['easingArguments'] = easing[2].slice(1, -1).replace(' ', '').split(',')
             } else {
-                tmp['buffer'] = 'bezier'
-                tmp['bufferArguments'] = [0.8]
+                tmp['easing'] = 'bezier'
+                tmp['easingArguments'] = [0.8]
             }
 
 
             tmp['cur_val'] = cur_val;
-            tmp['compute_val'] = compute_val;
+            tmp['computeVal'] = computeVal;
             tmp['duration'] = typeof duration === 'number'? duration:duration in this.speeds? this.speeds[duration]: this.speeds._default;
             tmp['unit'] = unit
             // 添加回调函数
