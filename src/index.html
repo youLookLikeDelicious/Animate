@@ -32,9 +32,10 @@
 </body>
 <script>
     // 获取元素
-    let div = document.querySelectorAll('div')
-    Animate.animate(div[0], {
+    let el = document.querySelector('div')
+    Animate.animate(el, {
         width:'400px',
+        height: '500px',
         buffer: 'bezier(0.5, 2)'
     }, 1000)
     // Animate.animate(div[1], {

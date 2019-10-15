@@ -11,5 +11,7 @@ animate.extend({
         new BannerAnimation(container, config);
     }
 });
-
+if (window) {
+    window.Animate = animate
+}
 export default animate
