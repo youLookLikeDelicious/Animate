@@ -21,8 +21,9 @@
     Animate(el, {
         width:'400px',
         height: '500px',
-        buffer: 'bezier(0.5, 2)'
-    }, 1000)
+        buffer: 'bezier(0.5, 2)',
+        duration: 3000
+    })
 
     # 自动渐隐渐显
     Animate(el, 'fadeToggle')
@@ -107,7 +108,7 @@
     Animate.bannerFader(canvase, {speed: 540, interval: 5000})
     ...
 ```
- #####banner动画效果
+ ##### banner动画效果
 ![alt text](http://m.qpic.cn/psb?/V11HvW1h3vJkOa/Dyb1co*5u8DlViJu0*g8jwTfR0Cq*gKPkMnuooLnhLg!/b/dLYAAAAAAAAA&bo=ZwNYAQAAAAADBx8!&rf=viewer_4)   
 
 

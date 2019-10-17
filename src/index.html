@@ -108,24 +108,25 @@
     Animate(el, {
         width:'400px',
         height: '500px',
-        buffer: 'bezier(0.5, 2)'
+        buffer: 'bezier(0.5, 2)',
+        duration: 2000
     })
 
     // 自动渐隐渐显
     function fadeToggle () {
         Animate(document.querySelector('.fade'), {ani: 'fadeToggle', duration: 2000, delay: 1000}, fadeToggle)
     }
-    fadeToggle();
+    // fadeToggle();
 
     /********display = none元素*********************************/
     //  自动上下滑动的动画
     function slideToggle () {
         Animate(document.querySelector('#box3'), {ani: 'slideToggle', delay: 700}, slideToggle)
     }
-    slideToggle()
+    // slideToggle()
 
     /********banner动画部分*************************************/
     let canvase = document.querySelector('.canvas')
-    Animate.bannerFader(canvase, {speed: 540, interval: 5000})
+    // Animate.bannerFader(canvase, {speed: 540, interval: 5000})
 </script>
 </html>
