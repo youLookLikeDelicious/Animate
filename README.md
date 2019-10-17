@@ -107,7 +107,7 @@
     Animate.bannerFader(canvase, {speed: 540, interval: 5000})
     ...
 ```
- #####banner动画效果
+ ##### banner动画效果
 ![alt text](http://m.qpic.cn/psb?/V11HvW1h3vJkOa/Dyb1co*5u8DlViJu0*g8jwTfR0Cq*gKPkMnuooLnhLg!/b/dLYAAAAAAAAA&bo=ZwNYAQAAAAADBx8!&rf=viewer_4)   
 
 
