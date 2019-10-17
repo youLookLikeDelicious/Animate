@@ -1,6 +1,6 @@
 {
   "name": "xy-animate",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "JavaScript Animation",
   "main": "src/index.js",
   "scripts": {
@@ -21,14 +21,19 @@
   },
   "homepage": "https://github.com/youLookLikeDelicious/animate#readme",
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "acorn": "^6.0.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
+    "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^6.5.1",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.40.2",
+    "webpack": "^4.28.4",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2"
@@ -39,7 +44,9 @@
     "AnimateInstance.js",
     "easing.js",
     "macro.js",
-    "extends.js",
-    "compatibility.js"
+    "compatibility.js",
+    "css.js",
+    "/extension/extends.js",
+    "/extension/predefind-animate"
   ]
 }

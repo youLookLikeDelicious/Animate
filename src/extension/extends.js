@@ -1,14 +1,18 @@
+import Css from '../utile/css'
 /**
  * 扩展插件
  * 1、banner渐隐效果
+ * @param container banner动画部分的顶级dom元素
  * @param json  config  相关配置，长度宽度等
+ * @param animate Animate的实例话对象
  */
 class BannerAnimation {
-    constructor(container, config) {
+    constructor (container, config, animate) {
         this.container = container; // 模板容器
         this.aEles = container.getElementsByTagName('a'); // 容器下的a标签
         this.lis = container.getElementsByTagName('li'); // 容器下的li标签
 
+        this.animate = animate
         // 如果只有一张图片，不启动动画
         if (this.aEles.length === 1) return;
 
@@ -21,7 +25,7 @@ class BannerAnimation {
         this.init();
     }
     // 初始化设置
-    init() {
+    init () {
         var _this = this,
             aEles = this.aEles,
             lis = this.lis;
@@ -42,7 +46,7 @@ class BannerAnimation {
         this.timer = window.setTimeout(() => _this.start(), this.interval);
     }
     // 鼠标移到img \ a标签时的事件
-    mouseOverListener(event = window.event) {
+    mouseOverListener (event = window.event) {
         // 取消冒泡
         if (event.stopPropagation) event.stopPropagation();
         else event.cancelBubble = true;
@@ -50,7 +54,7 @@ class BannerAnimation {
         this.stop();
     }
     // 鼠标移除img \ a标签的事件
-    mouseOutListener(event = window.event) {
+    mouseOutListener (event = window.event) {
         // 取消冒泡
         if (event.stopPropagation) event.stopPropagation();
         else event.cancelBubble = true;
@@ -60,7 +64,7 @@ class BannerAnimation {
         this.timer = window.setTimeout(() => _this.start(), this.interval);
     }
     // 鼠标移入li事件
-    overLiListener(event = window.event) {
+    overLiListener (event = window.event) {
         // 事件源
         var srcEle = event.target || event.srcElement,
             index;
@@ -92,7 +96,7 @@ class BannerAnimation {
     }
     // 开始执行banner动画
     // @param flag false preIndex = this.index
-    start(flag = true) {
+    start (flag = true) {
         var lis = this.lis,
             aEles = this.aEles;
 
@@ -104,24 +108,25 @@ class BannerAnimation {
         if (flag) {
             this.preIndex = this.curIndex;
         }
+
         // 索引加一
         if (++this.curIndex > this.maxIndex) {
             this.curIndex = 0;
         }
 
         let _this = this;
-
-        window.Animate.css(aEles[this.curIndex], 'opacity', 0);
+        this.animate.css(aEles[this.curIndex], 'opacity', 0);
 
         aEles[this.curIndex].style.zIndex = 2;
         // 修改li的样式
         lis[this.curIndex].className = 'on';
         // 开始执行转换动画
-        window.Animate.animate(aEles[this.curIndex], {
-            opacity: 1
-        }, this.speed, (item) => {
+        this.animate(aEles[this.curIndex], {
+            opacity: 1,
+            duration: this.speed
+        }, (item) => {
             _this.aEles[_this.preIndex].style.zIndex = 0;
-            window.Animate.css(_this.aEles[_this.preIndex], 'opacity', 0);
+            this.animate.css(_this.aEles[_this.preIndex], 'opacity', 0);
             if (item.style.zIndex == 2)
                 item.style.zIndex = 1;
             _this.stop();
@@ -132,11 +137,11 @@ class BannerAnimation {
 
     }
     // 清除定时器
-    stop() {
+    stop () {
         if (this.timer === null) return;
         window.clearTimeout(this.timer);
         this.timer = null;
     }
 }
 
-export {BannerAnimation}
+export default BannerAnimation

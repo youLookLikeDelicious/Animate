@@ -78,6 +78,8 @@
         // 清除动画
         window.cancelAnimationFrame = function () {
             window.clearTimeout(window.requestAnimationFrame.animationID)
+            window.requestAnimationFrame.animationCallback = null;
+            window.requestAnimationFrame.animationID = null;
         }
 
         // add document listener
