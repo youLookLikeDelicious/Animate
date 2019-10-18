@@ -203,7 +203,7 @@ class AnimateInstance{
 
         tmp['cur_val'] = cur_val
         tmp['computeVal'] = computeVal
-        tmp['duration'] = typeof config.duration === 'number' ? config.duration : config.duration in this.speeds? this.speeds[duration] : this.speeds._default
+        tmp['duration'] = !isNaN(config.duration) ? config.duration : config.duration in this.speeds? this.speeds[duration] : this.speeds._default
         tmp['unit'] = unit
 
         // 添加回调函数

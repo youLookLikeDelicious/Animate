@@ -14,6 +14,7 @@
 >>>config.duration 选填，动画执行的时间（毫秒计），默认700ms   
 >>>config.delay 选填，动画延迟（毫秒计），默认0    
 >>>config.times 选填，动画执行的次数，默认1   
+>>>config.easing 选填, 缓冲. bezier(param1, [param2])
 
 ### 使用
 ```
@@ -21,7 +22,7 @@
     Animate(el, {
         width:'400px',
         height: '500px',
-        buffer: 'bezier(0.5, 2)',
+        easing: 'bezier(0.5, 2)',
         duration: 3000
     })
 

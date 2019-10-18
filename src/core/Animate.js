@@ -64,7 +64,7 @@ class Animate {
         for (i in computeVal) {
             // dom属性赋值操作
             // 对象元素予以遍历
-            val = cur_val[i] + computeVal[i] * easing(percent);
+            val = cur_val[i] + computeVal[i] * easing(percent, ...config.easingArguments);
 
             this.css(el, i, val + config.unit);
         }

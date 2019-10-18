@@ -60,7 +60,7 @@ const autoConfig = {
     slideToggle: function (el) {
         let  curHeight = this.css(el, 'height')   // 获取元素当前的高度
 
-        if (curHeight === 0) {
+        if (curHeight === 0 || el.style.display === 'none') {
             return this.slideDown(el);
         }
         else if (curHeight > 0) {
