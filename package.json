@@ -1,6 +1,6 @@
 {
   "name": "xy-animate",
-  "version": "1.0.11",
+  "version": "1.0.14",
   "description": "JavaScript Animation",
   "main": "src/index.js",
   "scripts": {
@@ -40,13 +40,13 @@
   },
   "files": [
     "index.js",
-    "Animate.js",
-    "AnimateInstance.js",
-    "easing.js",
-    "macro.js",
-    "compatibility.js",
-    "css.js",
-    "/extension/extends.js",
-    "/extension/predefind-animate"
+    "src/core/Animate.js",
+    "src/core/AnimateInstance.js",
+    "src/utile/easing.js",
+    "src/utile/macro.js",
+    "src/utile/compatibility.js",
+    "src/utile/css.js",
+    "src/extension/extends.js",
+    "src/extension/predefind-animate.js"
   ]
 }
