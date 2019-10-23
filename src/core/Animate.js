@@ -50,7 +50,7 @@ class Animate {
     // 更新动画
     // return 是否完成动画
     tick (instance) {
-        let i, val,
+        let i = 0, val,
             config = instance.curConfig(), // 动画相关配置
             easing = this.easing[config.easing], // 动画使用的缓存
             el = instance.el, // 执行动画的dom元素
@@ -61,12 +61,14 @@ class Animate {
 
         percent = percent > 1 ? 1 : percent; // 防止溢出
 
-        for (i in computeVal) {
+        for (let item in computeVal) {
             // dom属性赋值操作
             // 对象元素予以遍历
-            val = cur_val[i] + computeVal[i] * easing(percent, ...config.easingArguments);
+            val = cur_val[item] + computeVal[item] * easing(percent, ...config.easingArguments);
 
-            this.css(el, i, val + config.unit);
+            this.css(el, item, val + config.unit[i])
+
+            ++i
         }
 
         return percent == 1;

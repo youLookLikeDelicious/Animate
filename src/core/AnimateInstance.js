@@ -148,12 +148,12 @@ class AnimateInstance{
      * @param callback
      */
     getConfig (config, callback) {
-        let i, cur,
+        let i = 0, cur,
             tmp = {},
             el = this.el,
             computeVal = {},
             cur_val = {},
-            unit = '', // 属性的单位
+            unit = [], // 属性的单位
             styles = this.css(el),
             styleStack // dom属性的配置信息
 
@@ -163,28 +163,29 @@ class AnimateInstance{
         }
 
         // 获取当前属性的值和总的计算量(目标值-当前值)
-        for(i in config){
-            if(i in styles){
-                styleStack = isNaN(config[i])? config[i].match(styleReg) : config[i]
-                unit = styleStack[2] || ''
+        for(let item in config){
+            if(item in styles){
+                styleStack = isNaN(config[item])? config[item].match(styleReg) : config[item]
+                unit.push(styleStack[2] || '')
 
                 // 获取属性当前的值
-                cur = this.css(el, i)
+                cur = this.css(el, item)
 
                 // 如果计算的长度单位是rem，将cur的值转换成rem
                 // 相应的，dom元素的属性也应该改变
-                if (unit === 'rem') {
+                if (unit[i] === 'rem') {
                     styleStack[1] *= REM
                 }
 
                 if(styleStack instanceof Array) {
-                    computeVal[i] = styleStack[1] - cur
+                    computeVal[item] = styleStack[1] - cur
                 } else {
-                    computeVal[i] = styleStack - cur
+                    computeVal[item] = styleStack - cur
                 }
 
-                cur_val[i] = cur
+                cur_val[item] = cur
             }
+            ++i
         }
 
         // 获取缓冲函数及其参数
