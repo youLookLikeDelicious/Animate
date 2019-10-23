@@ -1,4 +1,4 @@
-const styleReg = /(\d+)([a-z%]*)/
+const styleReg = /(-?\d+)([a-z%]*)/
 const separatePI = Math.PI / 2
 const easingReg = /(\w+)\s*(\(?\s*[\d\,\. ]*\)?)/      // 将缓冲函数的参数和函数体分离
 // 获取rem的值

@@ -175,6 +175,7 @@ class AnimateInstance{
                 // 相应的，dom元素的属性也应该改变
                 if (unit[i] === 'rem') {
                     styleStack[1] *= REM
+                    unit[i] = 'px'
                 }
 
                 if(styleStack instanceof Array) {
