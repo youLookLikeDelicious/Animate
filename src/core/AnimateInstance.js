@@ -26,7 +26,6 @@ class AnimateInstance{
         this.el = el
         this.speeds = speeds
 
-        this.getPreDefineAnimate(config)
         this.animate(config, callback)
     }
 

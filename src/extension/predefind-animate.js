@@ -58,9 +58,10 @@ const autoConfig = {
     // 1、当前的计算高度为0 向下滑动
     // 2、当前的计算高 > 0 向上滑动
     slideToggle: function (el) {
-        let  curHeight = this.css(el, 'height')   // 获取元素当前的高度
+        let  curHeight = this.css(el, 'height'), // 获取元素当前的高度
+            display = this.getStyle(el, 'display', false)
 
-        if (curHeight === 0 || el.style.display === 'none') {
+        if (curHeight === 0 || display === 'none') {
             return this.slideDown(el);
         }
         else if (curHeight > 0) {

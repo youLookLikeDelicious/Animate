@@ -1,17 +1,18 @@
 export default {
-    getStyle (el, styleAttr) {
+    getStyle (el, styleAttr, isInt = true) {
         if (getComputedStyle) {
             return typeof styleAttr === 'undefined' ? getComputedStyle(el) :
-                parseInt(getComputedStyle(el)[styleAttr]);
+                isInt ? parseInt(getComputedStyle(el)[styleAttr]) : getComputedStyle(el)[styleAttr];
         } else {
-            return typeof styleAttr === 'undefined' ? el.currentStyle : parseInt(el.currentStyle[styleAttr]);
+            return typeof styleAttr === 'undefined' ? el.currentStyle :
+                isInt ? parseInt(el.currentStyle[styleAttr]) : el.currentStyle[styleAttr];
         }
     },
     // DOM对象的css操作(赋值，获取值)
     // 取值的时候，如果style === undefined 返回整个currentStyle
     // [获取值: return number]
     css (el, styleAttr, val) {
-        let styleValue = '', tmpDisplay = '';
+        let styleValue = '', originDisplay = '';
 
         if (arguments.length == 3) {
             // 赋值操作
@@ -22,12 +23,12 @@ export default {
 
             // 获取display == 'none'的高度或宽度
             if (isNaN(styleValue) && (styleAttr == 'height' || styleAttr == 'width')) {
-                tmpDisplay = this.css(el, 'display');
+                originDisplay = this.getStyle(el, 'display', false);
 
                 this.css(el, 'visibility', 'hidden')
                 this.css(el, 'display', 'block')
                 styleValue = this.getStyle(el, styleAttr)
-                this.css(el, 'display', tmpDisplay)
+                this.css(el, 'display', originDisplay)
                 this.css(el, 'visibility', '')
             }
 
