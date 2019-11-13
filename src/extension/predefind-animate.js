@@ -43,7 +43,7 @@ const autoConfig = {
         el.setAttribute('data-direct', 'down')
         let h = el.getAttribute('slideTo')
 
-        if (el.style.display === 'none') {
+        if (this.getStyle(el, 'display', false) === 'none') {
             el.style.display = 'block'
         }
         // 没有slideTo Attribute 添加之
