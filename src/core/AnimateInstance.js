@@ -163,7 +163,7 @@ class AnimateInstance{
 
         // 获取当前属性的值和总的计算量(目标值-当前值)
         for(let item in config){
-            if(item in styles){
+            if(item in styles || item === 'scrollTop'){
                 styleStack = isNaN(config[item])? config[item].match(styleReg) : config[item]
                 unit.push(styleStack[2] || '')
 
@@ -211,7 +211,7 @@ class AnimateInstance{
         if(typeof callback === 'function') {
             tmp['callback'] = callback
         }
-
+        
         // 动画入队操作
         this.enqueue(tmp)
         // 结束当前的动画

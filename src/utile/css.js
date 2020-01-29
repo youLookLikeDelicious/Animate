@@ -1,3 +1,4 @@
+const scrollTop = 'scrollTop'
 export default {
     getStyle (el, styleAttr, isInt = true) {
         if (getComputedStyle) {
@@ -14,25 +15,38 @@ export default {
     css (el, styleAttr, val) {
         let styleValue = '', originDisplay = '';
 
-        if (arguments.length == 3) {
-            // 赋值操作
-            el.style[styleAttr] = val
-        } else {
-            // 获取值的操作,如果没有指定属性，获取所有属性
-            styleValue = this.getStyle(el, styleAttr, val)
+        switch (arguments.length) {
+            case 1:
+            case 2: 
+                if (styleAttr === scrollTop) {
+                    return el.scrollTop
+                }
+                // 获取值的操作,如果没有指定属性，获取所有属性
+                styleValue = this.getStyle(el, styleAttr, val)
 
-            // 获取display == 'none'的高度或宽度
-            if (isNaN(styleValue) && (styleAttr == 'height' || styleAttr == 'width')) {
-                originDisplay = this.getStyle(el, 'display', false);
+                // 获取display == 'none'的高度或宽度
+                if (isNaN(styleValue) && (styleAttr == 'height' || styleAttr == 'width')) {
+                    originDisplay = this.getStyle(el, 'display', false);
 
-                this.css(el, 'visibility', 'hidden')
-                this.css(el, 'display', 'block')
-                styleValue = this.getStyle(el, styleAttr)
-                this.css(el, 'display', originDisplay)
-                this.css(el, 'visibility', '')
-            }
+                    this.css(el, 'visibility', 'hidden')
+                    this.css(el, 'display', 'block')
+                    styleValue = this.getStyle(el, styleAttr)
+                    this.css(el, 'display', originDisplay)
+                    this.css(el, 'visibility', '')
+                }
 
-            return styleValue
+                return styleValue
+            break
+            case 3: 
+                // 赋值操作
+                if (styleAttr === scrollTop) {
+                    el.scrollTop = val
+                    return
+                }
+                el.style[styleAttr] = val
+            break
+            default:
+            break;
         }
     }
 }
