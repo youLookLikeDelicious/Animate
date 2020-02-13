@@ -44,7 +44,7 @@ const autoConfig = {
         let h = el.getAttribute('slideTo')
 
         if (this.getStyle(el, 'display', false) === 'none') {
-            el.style.display = 'block'
+            el.style.display = el.dataset.display || 'block'
         }
         // 没有slideTo Attribute 添加之
         if (!h) {

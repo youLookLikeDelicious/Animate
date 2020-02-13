@@ -40,5 +40,11 @@
             animate(document.querySelector('#box3'), {ani: 'slideToggle', delay: 700}, slideToggle)
     }
     slideToggle()
+
+    slideToggle也对display = 'none'的元素有效
+    在向下滑动的时候，默认会将display改为'block'，但在此之前，会尝试获取el.dataset.display属性。
+    
+    例如，<div data-display="flex" style="display: none">
+    会在启动动画之前，将元素的display该为flex，height改为0
 ```
 
