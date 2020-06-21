@@ -44,6 +44,8 @@
     # 自动渐隐渐显
     Animate(el, 'fadeToggle')
 
+    
+    // slideToggle也对display = 'none'的元素有效
     # 自动上下滑动
     function slideToggle () {
         Animate(document.querySelector('div'), {
@@ -53,8 +55,6 @@
     }
 
     slideToggle()
-
-    slideToggle也对display = 'none'的元素有效
 ```
 ### 兼容性
  IE >= 9
