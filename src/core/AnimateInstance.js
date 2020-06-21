@@ -24,6 +24,10 @@ class AnimateInstance{
 
         this.queue = []
         this.el = el
+
+        if (!el.style.willChange) {
+            el.style.willChange = 'auto'
+        }
         this.speeds = speeds
 
         this.animate(config, callback)
@@ -80,12 +84,12 @@ class AnimateInstance{
      */
     enqueue (item) {
         let timers = this.parent.timers, queue = this.queue
-        if (queue[0] === 'inprogress') {
+        if (queue[0] === 'inProgress') {
             queue.push(item)
         } else{
             // 第一次入队操作
             item['startTime'] = Date.now()
-            queue.push('inprogress')
+            queue.push('inProgress')
             queue.push(item)
             timers.push(this)
             this.parent.start()
@@ -136,7 +140,7 @@ class AnimateInstance{
             queue[0]['startTime'] = Date.now()
         }
 
-        queue.unshift('inprogress')
+        queue.unshift('inProgress')
         return queue.length >= 2
     }
 
@@ -196,7 +200,7 @@ class AnimateInstance{
             tmp['easingArguments'] = easing[2].slice(1, -1).replace(' ', '').split(',')
         }else {
             tmp['easing'] = 'bezier'
-            tmp['easingArguments'] = [0.8]
+            tmp['easingArguments'] = [0.6]
         }
 
         // 获取动画运行的次数,默认只运行一次

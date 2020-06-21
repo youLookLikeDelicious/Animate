@@ -50,7 +50,7 @@
 
     var vp,
         venders = ['webkit', 'mos'],
-        animationframe_interval = 1000 / 60,        // 默认的时间间隔
+        animationframe_interval = 1000 / 70,        // 默认的时间间隔
         ios6Pattern = /iP(ad|hone|od).*OS 6/;
 
     if (!window.requestAnimationFrame) {
@@ -70,7 +70,7 @@
                 callback();
             }, animationframe_interval);
         };
-
+        
         // 设置初始的状态
         window.requestAnimationFrame.animationCallback = null;
         window.requestAnimationFrame.animationID = null;

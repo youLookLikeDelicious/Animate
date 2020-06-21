@@ -9,6 +9,7 @@ class Animate {
         this.easing = easing;
         // 扩展插件
         this.plugins = {};
+        this._timer = this.timer.bind(this)
     }
 
     // 判断当前元素是否有动画实例
@@ -47,83 +48,89 @@ class Animate {
             }
         }
     }
-    // 更新动画
-    // return 是否完成动画
-    tick (instance) {
+    /**
+     * 更新动画
+     * @param {Object AnimateInstance} instance 
+     * @param {DOMHighResTimeStamp} timestamp 
+     * 
+     * return 是否完成动画
+     */
+    tick (instance, timestamp) {
         let i = 0, val,
             config = instance.curConfig(), // 动画相关配置
             easing = this.easing[config.easing], // 动画使用的缓存
             el = instance.el, // 执行动画的dom元素
-            now = Date.now(), // 当前时间
             computeVal = config.computeVal, // dom属性的增加量
             cur_val = config.cur_val, // dom属性的起始值
-            percent = (now - config.startTime) / config.duration;
+            percent = (Date.now() - config.startTime) / config.duration;
 
-        percent = percent > 1 ? 1 : percent; // 防止溢出
+        percent = percent > 1 ? 1 : parseFloat(percent); // 防止溢出
 
         for (let item in computeVal) {
             // dom属性赋值操作
             // 对象元素予以遍历
             val = cur_val[item] + computeVal[item] * easing(percent, ...config.easingArguments);
-
             this.css(el, item, val + config.unit[i])
-
             ++i
         }
 
         return percent == 1;
     }
-    // 指定间隔执行一次
-    timer () {
-        let _this = this;
+    
+    /**
+     * 更新所有的动画
+     * 
+     * @param {DOMHighResTimeStamp} timestamp
+     */
+    timer (timestamp) {
+        let AniInstance; // 动画配置实例
 
-        return function () {
-            let AniInstance; // 动画配置实例
+        // 执行动画
+        for (let i = 0, len = this.timers.length; i < len; i++) {
+            AniInstance = this.timers[i];
 
-            // 执行动画
-            for (let i = 0, len = _this.timers.length; i < len; i++) {
-                AniInstance = _this.timers[i];
+            // 判断动画是否结束, true为结束
+            if (this.tick(AniInstance, timestamp)) {
+                // 执行回调
+                let callback = AniInstance.curConfig().hasOwnProperty('callback') ? AniInstance.curConfig().callback : null;
 
-                // 判断动画是否结束, true为结束
-                if (_this.tick(AniInstance)) {
-                    // 执行回调
-                    let callback = AniInstance.curConfig().hasOwnProperty('callback') ? AniInstance.curConfig().callback : null;
+                if (callback) {
+                    callback(AniInstance.el)
+                }
 
-                    if (callback) {
-                        callback(AniInstance.el)
-                    }
-
-                    // 将动画配置实例退出队列
-                    if (!AniInstance.dequeue()) {
-                        // 某个元素的一个动画结束，并且在队列中有下一个动画
-                        _this.timers.splice(i, 1);
-                        --len; // 队列长度减一
-                    }
+                // 将动画配置实例退出队列
+                if (!AniInstance.dequeue()) {
+                    // 某个元素的一个动画结束，并且在队列中有下一个动画
+                    this.timers.splice(i, 1);
+                    --len; // 队列长度减一
                 }
             }
-
-            if (_this.isFinish()) {
-                _this.finish();
-            } else {
-                _this.interval = requestAnimationFrame(_this.timer());
-            }
         }
+
+        // length === 0 结束动画
+        if (this.timers.length === 0) {
+            this.finish()
+            return
+        }
+
+        this.interval = requestAnimationFrame(this._timer)
     }
-    // 开始执行动画
+    
+    /**
+     * 开始执行动画
+     */
     start () {
         if (!this.interval) {
-            this.interval = requestAnimationFrame(this.timer());
+            this.interval = requestAnimationFrame(this._timer);
         }
     }
-    // 判断动画是否结束
-    isFinish () {
-        return !this.timers.length
-    }
-    // 结束动画操作
+    
+    /**
+     * 结束动画
+     */
     finish () {
-        let _this = this
+        cancelAnimationFrame(this.interval)
         this.interval = undefined
-        cancelAnimationFrame(_this.interval)
     }
 }
 

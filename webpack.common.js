@@ -1,13 +1,11 @@
 const path = require('path')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: ["@babel/polyfill", "./src/index.js"],
     output: {
-        path: path.resolve(__dirname, "public"),
-        filename: "[name].bundle.js",
+        path: path.resolve(__dirname, "dir"),
+        filename: "index.js",
         chunkFilename: "[name].bundle.js",
     },
     module: {
@@ -19,23 +17,15 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env"]
+                        presets: [["@babel/preset-env", {targets: {
+                            "chrome": "58",
+                            "ie": "9"
+                        }}]],
                     },
                 }
             }
         ]
     },
-    plugins: [
-        new CleanWebpackPlugin({
-            cleanStaleWebpackAssets: true
-        }),
-        // 使用模板
-        new HtmlWebpackPlugin({
-            title: 'Animate',
-            template: './src/index.html',
-            filename: 'index.html'
-        })
-    ],
     optimization: {
         // 编译代码
         minimizer: [new UglifyJsPlugin({

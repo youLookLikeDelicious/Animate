@@ -1,50 +1,60 @@
 ### JavaScript 动画   
        
->允许使用rem作为长度单位 (统一处理成像素)  
+>允许使用rem作为长度单位 (统一处理成px)  
 附带banner动画（渐隐效果）   
     
 ...
-### 介绍
-> Animate(el, config, [callback])   
->>config 是动画的配置    
->>callback 动画结束后的回调 
->>>config.ani 选填，预定义的动画，自动生成配置，如fadeIn, fadeOut, fadeToggle, slideUp, slideDown, slideToggle  
->>>config.duration 选填，动画执行的时间（毫秒计），默认700ms   
->>>config.delay 选填，动画延迟（毫秒计），默认0    
->>>config.times 选填，动画执行的次数，默认1   
->>>config.easing 选填, 缓冲. bezier(param1, [param2])
+### 语法
+>Animate(el, config [, callback])
+
+#### 参数
+##### el 
+    执行动画的dom元素
+##### config
+
+```javascript
+{   
+    ani: String, // 选填，预定义的动画，如fadeIn, fadeOut, fadeToggle, slideUp, slideDown, slideToggle  
+    duration: Number, // 选填，动画执行的时间（毫秒计），默认700ms   
+    delay: Number,  // 选填，动画延迟（毫秒计），默认0    
+    times: Number,  // 选填，动画执行的次数，默认1   
+    easing: String, // 选填, 缓冲. 'bezier(param1 [,param2])' | 'swing'  | 'liner'
+}
+```
+##### callback
+    回调函数，会将el作为参数调用
 
 ### 安装
-```
-    npm install xy-animate
+```npm
+    npm install @blog1997/animate
 ```
 ### 使用
+```javascript
+    import animate from '@blog1997/animate'
 ```
-    import animate from 'xy-animate'
-```
-### hellow world
-```
-    let el = document.querySelector('div')
-    animate(el, {
-        width:'400px',
-        height: '500px',
+### hello world
+```javascript
+    Animate(document.querySelector('div'), {
+        width:  '400px',
+        height: '12rem',
         easing: 'bezier(0.5, 2)',
         duration: 3000
     })
 
     # 自动渐隐渐显
-    animate(el, 'fadeToggle')
+    Animate(el, 'fadeToggle')
 
     # 自动上下滑动
     function slideToggle () {
-            animate(document.querySelector('#box3'), {ani: 'slideToggle', delay: 700}, slideToggle)
+        Animate(document.querySelector('div'), {
+                    ani: 'slideToggle', 
+                    delay: 700
+                }, slideToggle)
     }
+
     slideToggle()
 
     slideToggle也对display = 'none'的元素有效
-    在向下滑动的时候，默认会将display改为'block'，但在此之前，会尝试获取el.dataset.display属性。
-    
-    例如，<div data-display="flex" style="display: none">
-    会在启动动画之前，将元素的display该为flex，height改为0
 ```
-
+### 兼容性
+ IE >= 9

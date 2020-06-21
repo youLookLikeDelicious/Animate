@@ -18,21 +18,14 @@ const easing = {
         return 1 - t * (1 - t);
     },
     bezier2: function (t, p1) {
-        let restP = 1 - t,
-            result = 1.6 * t - 0.6 * t * t
-        return  result
+        return 1.6 * t - t * t * 0.6
     },
     bezier3:function (t, p1, p2) {
-        let restP = 1 - t,
-            result = t * t * t + 3.0 * restP * t * (restP * p1 + t * p2)
-        return result
+        let restT = 1 - t
+        return (3 * (p2 * t + p1 * restT) * restT + t * t) * t
     },
     bezier:function (t) {
-        if( arguments.length === 3 ){
-            return easing.bezier3(t, arguments[1], arguments[2])
-        } else{
-            return easing.bezier2(t, arguments[1])
-        }
+        return arguments.length === 3 ? easing.bezier3(t, arguments[1], arguments[2]) : easing.bezier2(t, arguments[1])
     }
 }
 
