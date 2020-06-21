@@ -1,5 +1,7 @@
-### JavaScript 动画   
-       
+# JavaScript 动画   
+[![Current Release](https://img.shields.io/npm/v/@blog1997/animate)](Current-Release)
+[![License](https://img.shields.io/github/license/youLookLikeDelicious/Animate)](License)
+[![Min](https://img.shields.io/bundlephobia/min/@blog1997/animate)](min)
 >允许使用rem作为长度单位 (统一处理成px)  
 附带banner动画（渐隐效果）   
     
