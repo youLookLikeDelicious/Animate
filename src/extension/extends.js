@@ -7,14 +7,14 @@ import Css from '../utile/css'
  * @param animate Animate的实例话对象
  */
 class BannerAnimation {
-    constructor (container, config, animate) {
+    constructor (container, config = '', animate) {
         this.container = container; // 模板容器
         this.aEles = container.getElementsByTagName('a'); // 容器下的a标签
         this.lis = container.getElementsByTagName('li'); // 容器下的li标签
 
         this.animate = animate
         // 如果只有一张图片，不启动动画
-        if (this.aEles.length === 1) return;
+        if (this.aEles.length <= 1) return;
 
         this.curIndex = 0;
         this.preIndex = this.maxIndex = this.aEles.length - 1;

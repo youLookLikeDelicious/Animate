@@ -1,24 +1,39 @@
 import AniInstance from './AnimateInstance'
 import easing from '../utile/easing'
 import Css from '../utile/css'
+import{REM, styleReg, easingReg} from "../utile/macro"
+import AnimateInstance from './AnimateInstance'
+import addHandler from '../utile/add-handler'
 
 class Animate {
     constructor () {
         this.timers = []; // 不同元素对象的动画队列
         // 动画的缓冲函数
-        this.easing = easing;
         // 扩展插件
         this.plugins = {};
         this._timer = this.timer.bind(this)
     }
 
-    // 判断当前元素是否有动画实例
+    /**
+     * 判断一个对象是否是元素节点
+     * 
+     * @param {mixed} el
+     */
+    isElement (el) {
+        return typeof window.HTMLElement === 'function' ? el instanceof window.HTMLElement : el && typeof el === 'object' && el.nodeType === 1
+    }
+    /**
+     * 判断当前元素是否有动画实例
+     * @param {DOM} el 
+     * 
+     * @return {Number}
+     */    
     hasAnimate (el) {
         let timers = this.timers
 
         for (let i = 0, len = timers.length; i < len; i++) {
             if (timers[i].el === el) {
-                return i;
+                return i
             }
         }
         return false;
@@ -26,6 +41,9 @@ class Animate {
     // 实例化对象入口函数
     // 一个元素对象只能实例化一个AniInstance对象
     animate (el, config, callback = null) {
+        if (!this.isElement(el)) {
+            return
+        }
         let timersIndex = this.hasAnimate(el)
 
         if (timersIndex === false) {
@@ -58,7 +76,7 @@ class Animate {
     tick (instance, timestamp) {
         let i = 0, val,
             config = instance.curConfig(), // 动画相关配置
-            easing = this.easing[config.easing], // 动画使用的缓存
+            easing = this[config.easing], // 动画使用的缓存
             el = instance.el, // 执行动画的dom元素
             computeVal = config.computeVal, // dom属性的增加量
             cur_val = config.cur_val, // dom属性的起始值
@@ -69,8 +87,10 @@ class Animate {
         for (let item in computeVal) {
             // dom属性赋值操作
             // 对象元素予以遍历
-            val = cur_val[item] + computeVal[item] * easing(percent, ...config.easingArguments);
-            this.css(el, item, val + config.unit[i])
+            val = cur_val[item] + computeVal[item] * this[config.easing](percent, ...config.easingArguments);
+            
+            this.css(el, item, val + config.unit[item].ext)
+
             ++i
         }
 
@@ -94,15 +114,15 @@ class Animate {
                 // 执行回调
                 let callback = AniInstance.curConfig().hasOwnProperty('callback') ? AniInstance.curConfig().callback : null;
 
-                if (callback) {
-                    callback(AniInstance.el)
-                }
-
                 // 将动画配置实例退出队列
                 if (!AniInstance.dequeue()) {
                     // 某个元素的一个动画结束，并且在队列中有下一个动画
                     this.timers.splice(i, 1);
                     --len; // 队列长度减一
+                }
+
+                if (callback) {
+                    callback(AniInstance.el)
                 }
             }
         }
@@ -113,7 +133,7 @@ class Animate {
             return
         }
 
-        this.interval = requestAnimationFrame(this._timer)
+        this.interval = window.requestAnimationFrame(this._timer)
     }
     
     /**
@@ -121,7 +141,7 @@ class Animate {
      */
     start () {
         if (!this.interval) {
-            this.interval = requestAnimationFrame(this._timer);
+            this.interval = window.requestAnimationFrame(this._timer);
         }
     }
     
@@ -129,10 +149,14 @@ class Animate {
      * 结束动画
      */
     finish () {
-        cancelAnimationFrame(this.interval)
+        window.cancelAnimationFrame(this.interval)
         this.interval = undefined
     }
 }
 
+Animate.prototype.__AnimateInstance = AnimateInstance
 Object.assign( Animate.prototype, Css )
+Object.assign( Animate.prototype, easing)
+Object.assign( Animate.prototype, { addHandler })
+Object.assign( Animate.prototype, { REM, styleReg, easingReg} )
 export default Animate

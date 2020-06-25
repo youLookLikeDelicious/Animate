@@ -1,13 +1,7 @@
-const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 module.exports = {
-    entry: ["@babel/polyfill", "./src/index.js"],
-    output: {
-        path: path.resolve(__dirname, "dir"),
-        filename: "index.js",
-        chunkFilename: "[name].bundle.js",
-    },
     module: {
         rules: [
             // 导入js的规则
@@ -40,4 +34,12 @@ module.exports = {
             }
         })]
     },
+    plugins: [
+        new CleanWebpackPlugin({
+            cleanStaleWebpackAssets: true
+        }),
+    ],
+    externals: [{
+        xmlhttprequest:'{XMLHttpRequest:XMLHttpRequest}'
+     }]
 }

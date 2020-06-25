@@ -1,6 +1,6 @@
 import{REM, styleReg, easingReg} from "../utile/macro"
 import css from '../utile/css'
-import predefinedAnimate from '../extension/predefind-animate'
+import predefinedAnimate from '../extension/predefined-animate'
 
 // 默认动画速度,单位毫秒
 const speeds = {
@@ -20,16 +20,15 @@ class AnimateInstance{
      * @para parent Animate实例
      */
     constructor (el, config, callback, parent) {
+
         this.parent = parent
 
         this.queue = []
+
         this.el = el
 
-        if (!el.style.willChange) {
-            el.style.willChange = 'auto'
-        }
         this.speeds = speeds
-
+        
         this.animate(config, callback)
     }
 
@@ -57,16 +56,16 @@ class AnimateInstance{
      * @param callback
      */
     animate (config, callback) {
-        var _this = this,
-            _callback = typeof delay === 'function'? delay : callback
+        let _this = this,
+            _callback = typeof callback === 'function'? callback : ''
 
         this.getPreDefineAnimate(config)
 
         // 判断是否延迟处理
-        if (typeof config.delay === 'number') {
+        if (config.delay >>> 0 || _callback >>> 0) {
             window.setTimeout(function () {
                 _this.getConfig( config, _callback )
-            }, config.delay)
+            }, Math.max(config.delay >>> 0, _callback >>> 0))
         } else{
             this.getConfig( config, _callback )
         }
@@ -79,11 +78,12 @@ class AnimateInstance{
 
     /**
      * 动画入队操作
-     * @param item
+     * @param {Object} item 
      * @returns {boolean}
      */
     enqueue (item) {
         let timers = this.parent.timers, queue = this.queue
+        
         if (queue[0] === 'inProgress') {
             queue.push(item)
         } else{
@@ -95,18 +95,12 @@ class AnimateInstance{
             this.parent.start()
         }
 
-        // 处理延迟回调重新设置动画的情况
-        if (this.parent.hasAnimate(this.el) === false) {
-            queue[1]['startTime'] = Date.now()
-            timers.push(this)
-            this.parent.start()
-        }
-
         return true
     }
 
     /**
      * 判断动画是否移出队列
+     * times剩余动画的次数
      * @return boolean
      */
     checkDequeue () {
@@ -114,7 +108,7 @@ class AnimateInstance{
             return false
         }
 
-        if (!isNaN(this.queue[1].times) && --this.queue[1].times > 0) {
+        if (this.queue[1].times && --this.queue[1].times > 0) {
             return false
         }
 
@@ -122,26 +116,24 @@ class AnimateInstance{
     }
     /**
      * 动画出队操作
+     * @param {Boolean} forceDequeue 是否强制出队，作用于有times属性的动画
      * @returns {boolean} 如果有后续动画 true, 如果没有后续动画 false,
      */
-    dequeue () {
-        let queue = this.queue,
-            times = queue[1].times
-
+    dequeue (forceDequeue = false) {
         // 不允许出队
-        if (!this.checkDequeue()) {
+        if (!this.checkDequeue() && !forceDequeue) {
             return false
         }
 
-        queue.shift()
-        queue.shift()
+        this.queue.shift()
+        this.queue.shift()
         // 设置下一个动画效果的起始时间
-        if (queue.length >= 1) {
-            queue[0]['startTime'] = Date.now()
+        if (this.queue.length >= 1) {
+            this.queue[0]['startTime'] = Date.now()
         }
 
-        queue.unshift('inProgress')
-        return queue.length >= 2
+        this.queue.unshift('inProgress')
+        return this.queue.length >= 2
     }
 
     /**
@@ -156,7 +148,7 @@ class AnimateInstance{
             el = this.el,
             computeVal = {},
             cur_val = {},
-            unit = [], // 属性的单位
+            unit = {}, // 属性的单位
             styles = this.css(el),
             styleStack // dom属性的配置信息
 
@@ -167,18 +159,20 @@ class AnimateInstance{
 
         // 获取当前属性的值和总的计算量(目标值-当前值)
         for(let item in config){
+            unit[item] = {}
             if(item in styles || item === 'scrollTop'){
-                styleStack = isNaN(config[item])? config[item].match(styleReg) : config[item]
-                unit.push(styleStack[2] || '')
+                styleStack = isNaN(config[item])? config[item].match(styleReg) || '' : config[item]
+
+                unit[item].ext = styleStack[2] || ''
 
                 // 获取属性当前的值
                 cur = this.css(el, item)
 
                 // 如果计算的长度单位是rem，将cur的值转换成rem
                 // 相应的，dom元素的属性也应该改变
-                if (unit[i] === 'rem') {
+                if (unit[item].ext === 'rem') {
                     styleStack[1] *= REM
-                    unit[i] = 'px'
+                    unit[item].ext = 'px'
                 }
 
                 if(styleStack instanceof Array) {
@@ -189,40 +183,33 @@ class AnimateInstance{
 
                 cur_val[item] = cur
             }
+
             ++i
         }
 
         // 获取缓冲函数及其参数
-        if (config.hasOwnProperty('easing')) {
-            let easing = config.easing.match(easingReg)
-            tmp['easing'] = easing[1]
-            // 提取( 1， 23 )中的参数，保存在数组中
-            tmp['easingArguments'] = easing[2].slice(1, -1).replace(' ', '').split(',')
-        }else {
-            tmp['easing'] = 'bezier'
-            tmp['easingArguments'] = [0.6]
-        }
+        this.getEasing(config.easing, tmp)
 
         // 获取动画运行的次数,默认只运行一次
         tmp['times'] = config.hasOwnProperty('times')? config.times : 1
 
         tmp['cur_val'] = cur_val
         tmp['computeVal'] = computeVal
-        tmp['duration'] = !isNaN(config.duration) ? config.duration : config.duration in this.speeds? this.speeds[duration] : this.speeds._default
+        tmp['duration'] = !isNaN(config.duration) ? config.duration : config.duration in this.speeds? this.speeds[config.duration] : this.speeds._default
         tmp['unit'] = unit
 
         // 添加回调函数
         if(typeof callback === 'function') {
             tmp['callback'] = callback
         }
-        
+
         // 动画入队操作
         this.enqueue(tmp)
         // 结束当前的动画
-        if( config.hasOwnProperty('finish') && config.finish === true){
+        if (config.finish === true) {
             // 如果之前有动画，则取消之前的动画，反之不取消
             if(this.queue.length > 2){
-                this.dequeue()
+                this.dequeue(true)
             }
         }
     }
@@ -235,10 +222,32 @@ class AnimateInstance{
         for(let key in obj){
             // 如果AnimateInstance已经拥有obj的key值，抛出异常
             if(AnimateInstance.hasOwnProperty(key)){
-                new Error('AnimateInstance already had this propety!')
+                new Error('AnimateInstance already had this property!')
             }
             AnimateInstance.prototype[key] = obj[key]
         }
+    }
+
+    /**
+     * 获取缓冲函数的配置
+     * @param {String} easing 输入的缓冲
+     * @param {Object} &tmp 赋值的对象
+     */
+    getEasing (easing, tmp) {        
+        // 将函数体和参数分离
+        easing = easing || ''
+        easing = easing.match(easingReg)
+
+        // 配置默认的缓冲
+        if (!easing || !this.parent[easing[1]]) {
+            tmp['easing'] = 'bezier'
+            tmp['easingArguments'] = [0.6]
+            return
+        }
+
+        tmp['easing'] =  easing[1]
+        // 提取( 1， 23 )中的参数，保存在数组中
+        tmp['easingArguments'] = easing[2].slice(1, -1).replace(' ', '').split(',')
     }
 }
 

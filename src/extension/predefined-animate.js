@@ -17,11 +17,7 @@ const autoConfig = {
     },
     // 自动渐隐渐现
     fadeToggle: function (el) {
-        if(this.css(el, 'opacity') == 0){
-            return {"opacity": 1}
-        } else if(this.css(el, 'opacity') == 1){
-            return {"opacity": 0}
-        }
+        return this.css(el, 'opacity') > 0 ? {"opacity": 0} : {"opacity": 1}
     },
     // 向上滑动
     slideUp: function (el) {
@@ -44,7 +40,7 @@ const autoConfig = {
         let h = el.getAttribute('slideTo')
 
         if (this.getStyle(el, 'display', false) === 'none') {
-            el.style.display = el.dataset ? el.dataset.display || 'block' : el.getAttribute('data-display') || 'block'
+            el.style.display = el.getAttribute('data-display') || 'block'
         }
         // 没有slideTo Attribute 添加之
         if (!h) {
@@ -54,9 +50,12 @@ const autoConfig = {
         }
         return {height: h + 'px'}
     },
-    // 自动滑动
-    // 1、当前的计算高度为0 向下滑动
-    // 2、当前的计算高 > 0 向上滑动
+    /**
+     * 自动上下滑动
+     * 1、当前的计算高度为0 向下滑动
+     * 2、当前的计算高 > 0 向上滑动
+     * @param {DOM} el 
+     */
     slideToggle: function (el) {
         let  curHeight = this.css(el, 'height'), // 获取元素当前的高度
             display = this.getStyle(el, 'display', false)

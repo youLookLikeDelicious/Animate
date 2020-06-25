@@ -45,18 +45,16 @@
 
     # 自动渐隐渐显
     Animate(el, 'fadeToggle')
-
-    
-    // slideToggle也对display = 'none'的元素有效
+```
+slideToggle也对display = 'none',并且没有指定宽高的元素有效
+```javascript
     # 自动上下滑动
     function slideToggle () {
         Animate(document.querySelector('div'), {
-                    ani: 'slideToggle', 
-                    delay: 700
-                }, slideToggle)
+            ani: 'slideDown', 
+            delay: 700
+        })
     }
-
-    slideToggle()
 ```
 ### 兼容性
  IE >= 9

@@ -7,7 +7,7 @@ var animate = new Animate()
 // 安装插件
 animate.extend({
     bannerFader: function (container, config = {}) {
-        new BannerAnimation(container, config || {}, this)
+        return new BannerAnimation(container, config, this)
     }
 });
 

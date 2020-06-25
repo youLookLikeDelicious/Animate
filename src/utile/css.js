@@ -9,9 +9,14 @@ export default {
                 isInt ? parseInt(el.currentStyle[styleAttr]) : el.currentStyle[styleAttr];
         }
     },
-    // DOM对象的css操作(赋值，获取值)
-    // 取值的时候，如果style === undefined 返回整个currentStyle
-    // [获取值: return number]
+    /**
+     * DOM对象的css操作(赋值，获取值)
+     * 取值的时候，如果style === undefined 返回整个currentStyle
+     * [获取值: return number]
+     * @param {HTMLElement} el 
+     * @param {String} styleAttr 
+     * @param {String | Number} val 
+     */
     css (el, styleAttr, val) {
         let styleValue = '', originDisplay = '';
 
@@ -45,8 +50,6 @@ export default {
                 }
                 el.style[styleAttr] = val
             break
-            default:
-            break;
         }
     }
 }
