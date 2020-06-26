@@ -1,2 +1,2 @@
 import '../src/index'
-import '../src/banner-animation'
+import '../banner-animation'

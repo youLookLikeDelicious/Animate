@@ -1,4 +1,4 @@
-import '../../../src/banner-animation'
+import '../../../banner-animation'
 describe('test banner animation', function () {
     before(function () {
         window.addHandler = Animate.addHandler

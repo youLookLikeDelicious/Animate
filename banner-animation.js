@@ -1,5 +1,5 @@
-import BannerAnimation from './extension/extends'
-import { animateInstance } from './index'
+import BannerAnimation from './src/extension/extends'
+import { animateInstance } from './src/index'
 
 animateInstance.extend({
     bannerFader: function (container, config = {}) {
