@@ -3,5 +3,5 @@
 /node_modules/
 /dir/
 package-lock.json
-/.nyc_output/
-coverage/
+/.nyc_output/*
+/coverage/*

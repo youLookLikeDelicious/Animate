@@ -8,7 +8,7 @@
     "build": "webpack --config ./webpack-config/webpack.prod.js",
     "test": " mocha --require @babel/register --exit ./test/test.spec.js",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov npm run test",
-    "codecov": "codecov"
+    "codecov": "codecov --token=e56cf2d6-2063-4e78-acfa-1b4f4346f325"
   },
   "repository": {
     "type": "git",
