@@ -1,4 +1,4 @@
-export default function (obj, type, handler, flag = false) {
+function addHandler (obj, type, handler, flag = false) {
     if (obj.addEventListener) {
         // 标准浏览器方式
         obj.addEventListener(type, handler, flag);
@@ -10,3 +10,5 @@ export default function (obj, type, handler, flag = false) {
         obj['on' + type] = handler;
     }
 }
+window.addHandler = addHandler
+export default addHandler

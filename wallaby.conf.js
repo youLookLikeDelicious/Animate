@@ -1,5 +1,3 @@
-const webpackTestConfig = require('./webpack-config/webpack.wallaby')
-
 module.exports = function (wallaby) {
   return {
     files: [

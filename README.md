@@ -2,9 +2,10 @@
 [![Current Release](https://img.shields.io/npm/v/@blog1997/animate)](Current-Release)
 [![License](https://img.shields.io/github/license/youLookLikeDelicious/Animate)](License)
 [![Min](https://img.shields.io/bundlephobia/min/@blog1997/animate)](min)
+[![coverage](https://img.shields.io/codecov/c/github/youLookLikeDelicious/Animate)](coverage)
 >允许使用rem作为长度单位 (统一处理成px)  
 附带banner动画（渐隐效果）   
-    
+兼容性 IE >= 9
 ...
 ### 语法
 >Animate(el, config [, callback])
@@ -46,7 +47,7 @@
     # 自动渐隐渐显
     Animate(el, 'fadeToggle')
 ```
-slideToggle也对display = 'none',并且没有指定宽高的元素有效
+slideToggle也对display = 'none',并且没有指定宽高的元素有效。会根据元素中的内容自动调整尺寸。
 ```javascript
     # 自动上下滑动
     function slideToggle () {
@@ -56,5 +57,3 @@ slideToggle也对display = 'none',并且没有指定宽高的元素有效
         })
     }
 ```
-### 兼容性
- IE >= 9

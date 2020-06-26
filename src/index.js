@@ -1,25 +1,17 @@
 import './utile/compatibility'
 import Animate from './core/Animate'
-import BannerAnimation from './extension/extends'
 
-var animate = new Animate()
-
-// 安装插件
-animate.extend({
-    bannerFader: function (container, config = {}) {
-        return new BannerAnimation(container, config, this)
-    }
-});
+var animateInstance = new Animate()
 
 function init () {
-    animate.animate(...arguments)
+    animateInstance.animate(...arguments)
 }
 
-Object.assign(init, animate)
-Object.assign(init, Animate.prototype)
+animateInstance.bind(init)
 
 if (window) {
     window.Animate = init
 }
 
+export { animateInstance }
 export default init

@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = merge(common, {
   mode: 'development',
-  entry: ["@babel/polyfill", "./src/index.js"],
+  entry: ["@babel/polyfill", "./dev/index.js"],
   devServer: {
 	  hot: true
   },
@@ -15,7 +15,7 @@ module.exports = merge(common, {
     // 使用模板
     new HtmlWebpackPlugin({
         title: 'Animate',
-        template: './dev/index.html',
+        template: './dev/template/index.html',
         filename: 'index.html'
     })
 ]

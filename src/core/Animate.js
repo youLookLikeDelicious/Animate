@@ -12,6 +12,7 @@ class Animate {
         // 扩展插件
         this.plugins = {};
         this._timer = this.timer.bind(this)
+        this._relation = ''
     }
 
     /**
@@ -58,10 +59,13 @@ class Animate {
         if (Object.prototype.toString.call(plugin) === '[object Object]') {
             for (let i in plugin) {
                 if (!this.hasOwnProperty(i)) {
-                    this[i] = plugin[i];
+                    this[i] = plugin[i]
+                    if (this._relation) {
+                        this._relation[i] = plugin[i]
+                    }
                 } else {
                     // 如果属性名称冲突，抛出报错信息
-                    new Error('Animate already has this attribute ' + i);
+                    new Error('Animate already has this attribute ' + i)
                 }
             }
         }
@@ -151,6 +155,16 @@ class Animate {
     finish () {
         window.cancelAnimationFrame(this.interval)
         this.interval = undefined
+    }
+
+    /**
+     * 
+     * @param {Object} obj 
+     */
+    bind (ref) {
+        this._relation = ref
+        Object.assign(ref, this)
+        Object.assign(ref, Animate.prototype)
     }
 }
 
