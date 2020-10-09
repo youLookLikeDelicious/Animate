@@ -1,6 +1,6 @@
 {
   "name": "@blog1997/animate",
-  "version": "0.0.2-beta",
+  "version": "0.0.3-beta",
   "description": "JavaScript Animation",
   "main": "src/index.js",
   "scripts": {
@@ -39,6 +39,7 @@
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^3.0.0",
     "codecov": "^3.7.0",
+    "cross-env": "^7.0.2",
     "es6-promise": "^4.2.8",
     "eslint": "^6.8.0",
     "html-webpack-plugin": "^3.2.0",
