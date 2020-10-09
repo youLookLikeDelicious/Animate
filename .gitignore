@@ -1,8 +1,0 @@
-/.git/
-/.idea/
-/node_modules/
-/dir/
-package-lock.json
-/.nyc_output/
-/coverage/
-codecov.yml
