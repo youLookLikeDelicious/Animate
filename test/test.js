@@ -1,6 +1,3 @@
-require('jsdom-global')()
-require('es6-promise/auto')
-
 const requireContext = require('require-context')
 
 const assert = require('assert')
@@ -13,6 +10,7 @@ hooks.keys().forEach(hooks)
 import('../src/index').then((func) => {
     global.Animate = func.default
 })
+
 // import Animate from '../src/index'
 // global.Animate = Animate
 const testContext = requireContext('../../test/unity', true)

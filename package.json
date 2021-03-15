@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "webpack-dev-server --config ./webpack-config/webpack.dev.js",
     "build": "webpack --config ./webpack-config/webpack.prod.js",
-    "test": " mocha --require @babel/register --exit ./test/test.spec.js",
+    "test": " mocha",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov npm run test",
-    "codecov": "codecov"
+    "report-coverage": "codecov"
   },
   "repository": {
     "type": "git",

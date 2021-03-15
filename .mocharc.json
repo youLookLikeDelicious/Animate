@@ -1,0 +1,4 @@
+{
+    "require": ["@babel/register", "jsdom-global/register", "./test/generate-dom.js"],
+    "exit": true
+}
