@@ -30,11 +30,12 @@ const autoConfig = {
     // 向上滑动
     slideUp: function (el) {
         el.setAttribute('data-direct', 'up')
-        let h = el.getAttribute('slideTo')
+        let h = this.css(el, 'height')
 
         // 如果元素没有slidTo属性，添加之，值为元素当前的计算高度
-        h = this.css(el, 'height')
-        el.setAttribute('slideTo', h)
+        if (!+el.getAttribute('slideTo')) {
+            el.setAttribute('slideTo', h)
+        }
 
         if (h > 0) {
             return {
