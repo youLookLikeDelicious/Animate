@@ -1,6 +1,6 @@
 {
   "name": "@blog1997/animate",
-  "version": "0.0.3-beta",
+  "version": "0.0.4-beta",
   "description": "JavaScript Animation",
   "main": "src/index.js",
   "scripts": {
